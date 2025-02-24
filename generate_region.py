@@ -51,9 +51,3 @@ def generate_regions(num_regions: int, num_dimensions: int) -> np.ndarray:
     
     # Return an array of coordinate arrays (each region's coordinates)
     return np.array([np.array(regions_dict[r]) for r in range(num_regions)], dtype=object)
-
-# Example usage:
-regions = generate_regions(3, 4)
-print("Regions as coordinate lists:")
-print(regions)
-
