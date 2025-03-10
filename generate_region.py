@@ -2,16 +2,20 @@ import numpy as np
 import random
 from collections import deque
 
-def generate_regions(num_regions: int, num_dimensions: int) -> np.ndarray:
+def generate_regions(num_regions: int, num_dimensions: int) -> (np.ndarray, list):
     """
-    Generate grid of size 'num_dimensions' that is divided into 'num_regions' contiguous regions
+    Generate a grid of size 'num_dimensions' x 'num_dimensions' that is divided into 
+    'num_regions' contiguous regions and produce a list of coordinates for each region.
     
     Parameters:
         num_regions (int): Number of regions.
         num_dimensions (int): Size of the square grid.
     
     Returns:
-        np.ndarray: A NumPy array containing coordinate arrays for each region.
+        tuple:
+            np.ndarray: The grid with each cell assigned a region number.
+            list: A list of length 'num_regions', where each element is a sorted list of 
+                  (x, y) tuples indicating the coordinates in the grid for that region.
     """
     # Initialize grid with -1 (unassigned)
     grid = np.full((num_dimensions, num_dimensions), -1, dtype=int)
@@ -45,9 +49,22 @@ def generate_regions(num_regions: int, num_dimensions: int) -> np.ndarray:
                 queues.append((nx, ny, region))
                 regions_dict[region].append((nx, ny))
     
+    # Create a sorted list of coordinates for each region ordered by region number
+    region_coords_list = [sorted(regions_dict[i]) for i in range(num_regions)]
+    
     # Print the grid view (matrix representation)
     print("Grid representation:")
     print(grid)
     
-    # Return an array of coordinate arrays (each region's coordinates)
-    return np.array([np.array(regions_dict[r]) for r in range(num_regions)], dtype=object)
+    # Print the coordinates of each region with each coordinate on a new line
+    print("\nList of sorted coordinates for each region:")
+    for idx, coords in enumerate(region_coords_list):
+        print(f"Region {idx}:")
+        for coord in coords:
+            print(f"  {coord}")
+        print()  # newline for spacing between regions
+    
+    return grid, region_coords_list
+
+# Example usage:
+grid, region_coords = generate_regions(3, 4)
